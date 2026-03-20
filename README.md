@@ -1,3 +1,31 @@
+# Task
+Eventually Consistent Form
+Time: 3–5 hours
+Stack: Any JS framework but we prefer our core stack
+Build a small web app with a single page and a single form.
+
+The form collects
+- email
+- amount (number)
+
+When the user submits:
+The UI should immediately show a “pending” state
+The request should be sent to a mock API
+The API responds randomly with:
+
+success (200)temporary failure (503) delayed success (responds after 5–10 seconds)
+Requirements
+
+Prevent duplicate submissions
+If the API fails temporarily, retry automatically (with a limit)
+The user must never see duplicate records
+The UI must clearly reflect the current state
+
+Deliverables:
+Working app
+README explaining:
+State transitions, Retry logic, How duplicates are prevented 
+
 # Form Submission App
 
 A React web application with intelligent form submission handling, including state management, retry logic, and duplicate prevention.
@@ -30,7 +58,7 @@ npm run server
 
 3. In a new terminal, start the React app:
 ```bash
-npm start
+npm run dev
 ```
 
 The app will be available at `http://localhost:3000` and the API server at `http://localhost:3001`.

@@ -1,5 +1,19 @@
 # API Testing Guide
 
+## Quick Start
+
+**Start the mock API server:**
+```bash
+npm run server
+```
+
+**Start the React app (optional):**
+```bash
+npm run dev
+```
+
+The API server runs on `http://localhost:3001` and the React app on `http://localhost:3000`.
+
 ## Mock API Server Endpoints
 
 ### Base URL
