@@ -100,7 +100,7 @@ The application implements intelligent retry logic for handling temporary failur
 
 ### Retry Strategy
 - **Exponential Backoff**: Delay increases with each retry (1s, 2s, 3s)
-- **Progress Tracking**: Shows current retry attempt (e.g., "Retry attempt 2/3")
+- **Progress Tracking**: 3 retry attempt
 - **Automatic Execution**: No user intervention required
 - **Graceful Failure**: After max retries, shows error message
 
