@@ -1,16 +1,21 @@
-import express from 'express';
-import cors from 'cors';
-
-const app = express();
-const port = process.env.PORT || 3001;
-
-app.use(cors());
-app.use(express.json());
-
 // Store submitted records to prevent duplicates
-const submittedRecords = new Set();
+let submittedRecords = new Set();
 
-app.post('/api/submit', (req, res) => {
+export default async function handler(req, res) {
+  // Handle CORS
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  
+  if (req.method === 'OPTIONS') {
+    res.status(200).end();
+    return;
+  }
+
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
   const timestamp = new Date().toISOString();
   const { email, amount } = req.body;
   
@@ -98,37 +103,4 @@ app.post('/api/submit', (req, res) => {
       res.status(200).json({ success: true, message: 'Submission successful (delayed)' });
     }, delay);
   }
-});
-
-// Endpoint to check server status
-app.get('/api/status', (req, res) => {
-  const timestamp = new Date().toISOString();
-  console.log(`\n[${timestamp}] STATUS CHECK REQUESTED`);
-  console.log(`   Current records: ${submittedRecords.size}`);
-  console.log(`   Responding with server status\n`);
-  res.json({ status: 'Server running', recordsCount: submittedRecords.size });
-});
-
-// Reset records (for testing)
-app.post('/api/reset', (req, res) => {
-  const timestamp = new Date().toISOString();
-  const count = submittedRecords.size;
-  submittedRecords.clear();
-  console.log(`\n[${timestamp}] RECORDS RESET`);
-  console.log(`   Cleared ${count} records`);
-  console.log(`   Responding with reset confirmation\n`);
-  res.json({ message: 'Records reset' });
-});
-
-// Export for Vercel
-export default app;
-
-// Local development
-if (process.env.NODE_ENV !== 'production') {
-  app.listen(port, () => {
-    console.log(`\nMOCK API SERVER STARTED`);
-    console.log(`   URL: http://localhost:${port}`);
-    console.log(`   Time: ${new Date().toISOString()}`);
-    console.log(`   Ready to handle requests...\n`);
-  });
 }

@@ -1,14 +1,21 @@
 import express from 'express';
 import cors from 'cors';
 
-const app = express();
-const port = process.env.PORT || 3001;
-
-app.use(cors());
-app.use(express.json());
-
 // Store submitted records to prevent duplicates
 const submittedRecords = new Set();
+
+// Create Express app
+const app = express();
+
+// CORS configuration
+app.use(cors({
+  origin: process.env.NODE_ENV === 'production' 
+    ? ['https://your-app.vercel.app', 'https://localhost:3000']
+    : true,
+  credentials: true
+}));
+
+app.use(express.json());
 
 app.post('/api/submit', (req, res) => {
   const timestamp = new Date().toISOString();
@@ -120,15 +127,7 @@ app.post('/api/reset', (req, res) => {
   res.json({ message: 'Records reset' });
 });
 
-// Export for Vercel
-export default app;
-
-// Local development
-if (process.env.NODE_ENV !== 'production') {
-  app.listen(port, () => {
-    console.log(`\nMOCK API SERVER STARTED`);
-    console.log(`   URL: http://localhost:${port}`);
-    console.log(`   Time: ${new Date().toISOString()}`);
-    console.log(`   Ready to handle requests...\n`);
-  });
+// Vercel serverless function handler
+export default function handler(req, res) {
+  app(req, res);
 }

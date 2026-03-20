@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 
-const API_BASE_URL = 'http://localhost:3001';
+const API_BASE_URL = ''; // Use relative URL for same origin
 const MAX_RETRIES = 3;
 const RETRY_DELAY = 1000;
 
@@ -76,7 +76,7 @@ const App = () => {
 
     try {
       console.log(`   CLIENT: Sending API request...`);
-      const response = await fetch(`${API_BASE_URL}/api/submit`, {
+      const response = await fetch(`${API_BASE_URL}/api/submit.js`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -108,7 +108,7 @@ const App = () => {
         console.log(`   CLIENT: Retry delay: ${RETRY_DELAY * (retries + 1)}ms`);
         setRetryCount(retries + 1);
         setStatus('pending');
-        setErrorMessage('Processing...');
+        setErrorMessage(`Server busy... Retrying (${retries + 1}/${MAX_RETRIES})`);
         
         setTimeout(() => {
           submitForm(retries + 1);
