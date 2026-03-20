@@ -104,11 +104,11 @@ const App = () => {
         setRetryCount(0);
       } else if (response.status === 503 && retries < MAX_RETRIES) {
         // Temporary failure - retry
-        console.log(`   CLIENT: Temporary failure, scheduling retry ${retries + 1}/${MAX_RETRIES}`);
+        console.log(`   CLIENT: Server busy, scheduling retry ${retries + 1}/${MAX_RETRIES}`);
         console.log(`   CLIENT: Retry delay: ${RETRY_DELAY * (retries + 1)}ms`);
         setRetryCount(retries + 1);
         setStatus('pending');
-        setErrorMessage(`Temporary failure, retrying... (${retries + 1}/${MAX_RETRIES})`);
+        setErrorMessage('Processing...');
         
         setTimeout(() => {
           submitForm(retries + 1);
@@ -137,7 +137,7 @@ const App = () => {
         console.log(`   CLIENT: Scheduling network retry ${retries + 1}/${MAX_RETRIES}`);
         console.log(`   CLIENT: Retry delay: ${RETRY_DELAY * (retries + 1)}ms`);
         setRetryCount(retries + 1);
-        setErrorMessage(`Network error, retrying... (${retries + 1}/${MAX_RETRIES})`);
+        setErrorMessage('Processing...');
         
         setTimeout(() => {
           submitForm(retries + 1);
@@ -169,10 +169,10 @@ const App = () => {
     }
 
     console.log(`   CLIENT: Validation passed`);
-    console.log(`   CLIENT: Setting UI to pending state`);
+    console.log(`   CLIENT: Setting UI to processing state`);
     setIsSubmitting(true);
     setStatus('pending');
-    setErrorMessage('');
+    setErrorMessage('Processing...');
     setRetryCount(0);
 
     submitForm();
@@ -200,10 +200,7 @@ const App = () => {
         return (
           <div className="status-message status-pending">
             <div className="loading-spinner"></div>
-            Processing your submission...
-            {retryCount > 0 && (
-              <div className="retry-info">Retry attempt {retryCount}/{MAX_RETRIES}</div>
-            )}
+            {errorMessage || 'Processing your submission...'}
           </div>
         );
       case 'success':
